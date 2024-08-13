@@ -5,6 +5,8 @@ import {z} from 'zod';
 import {registerUser} from '@/services/authService';
 import TextInput from '@/components/TextInput';
 import Link from "next/link";
+import {toast} from "react-hot-toast";
+import Guest from "@/components/layouts/Guest";
 
 const RegisterPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -74,11 +76,10 @@ const RegisterPage: React.FC = () => {
         setLoading(true);
         try {
             const response = await registerUser(formData.name, formData.email, formData.password);
-            setMessage(response?.message ?? 'User registered successfully');
+            // show toast message
+            toast.success(response?.message ?? 'User registered successfully');
             setFormData({name: '', email: '', password: '', confirmPassword: ''});
-            setTimeout(() => {
-                router.push('/login');
-            }, 2000);
+            router.push('/login');
         } catch (error) {
             setMessage('Error registering user');
         } finally {
@@ -87,64 +88,66 @@ const RegisterPage: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 bg-white lg:rounded-lg lg:shadow-lg">
-                <h1 className="text-2xl font-bold mb-3 text-gray-900">Register</h1>
-                <p className="mb-3 text-sm text-gray-400">
-                    Please fill in the form below to create an account.
-                </p>
-                <form onSubmit={handleSubmit} aria-live="polite">
-                    <TextInput
-                        label="Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        error={errors.name}
-                    />
-                    <TextInput
-                        label="Email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        error={errors.email}
-                    />
-                    <TextInput
-                        label="Password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        error={errors.password}
-                    />
+        <Guest>
+            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+                <div className="w-full max-w-md p-8 bg-white lg:rounded-lg lg:shadow-lg">
+                    <h1 className="text-2xl font-bold mb-3 text-gray-900">Register</h1>
+                    <p className="mb-3 text-sm text-gray-400">
+                        Please fill in the form below to create an account.
+                    </p>
+                    <form onSubmit={handleSubmit} aria-live="polite">
+                        <TextInput
+                            label="Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            error={errors.name}
+                        />
+                        <TextInput
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            error={errors.email}
+                        />
+                        <TextInput
+                            label="Password"
+                            name="password"
+                            type="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            error={errors.password}
+                        />
 
-                    <TextInput
-                        label="Confirm Password"
-                        name="confirmPassword"
-                        type="password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        error={errors.confirmPassword}
-                    />
+                        <TextInput
+                            label="Confirm Password"
+                            name="confirmPassword"
+                            type="password"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            error={errors.confirmPassword}
+                        />
 
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-blue-300"
-                        disabled={loading}
-                    >
-                        {loading ? 'Registering...' : 'Register'}
-                    </button>
-                </form>
-                {message && <p className="mt-4 text-center text-red-500" aria-live="assertive">{message}</p>}
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                            disabled={loading}
+                        >
+                            {loading ? 'Registering...' : 'Register'}
+                        </button>
+                    </form>
+                    {message && <p className="mt-4 text-center text-red-500" aria-live="assertive">{message}</p>}
 
-                <p className="mt-3">
-                    Already have an account?{' '}
-                    <Link href="/login" className="text-blue-600 hover:underline">
-                        Login
-                    </Link>
-                </p>
+                    <p className="mt-3">
+                        Already have an account?{' '}
+                        <Link href="/login" className="text-blue-600 hover:underline">
+                            Login
+                        </Link>
+                    </p>
+                </div>
             </div>
-        </div>
+        </Guest>
     );
 };
 

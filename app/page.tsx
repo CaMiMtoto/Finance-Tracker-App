@@ -1,9 +1,17 @@
 import Image from "next/image";
+import Hero from "@/components/home/Hero";
+import Features from "@/components/home/Features";
+import CallToAction from "@/components/home/CallToAction";
+import Footer from "@/components/home/Footer";
+import Guest from "@/components/layouts/Guest";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Homeage</h1>
-    </main>
-  );
+    return (
+        <Guest>
+            <Hero/>
+            <Features/>
+            <CallToAction/>
+            <Footer/>
+        </Guest>
+    );
 }
